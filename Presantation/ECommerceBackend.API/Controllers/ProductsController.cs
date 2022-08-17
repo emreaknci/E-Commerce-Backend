@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using ECommerceBackend.Application.Repositories;
+using ECommerceBackend.Application.RequestParameters;
 using ECommerceBackend.Application.ViewModels.Products;
 using ECommerceBackend.Domain.Entities.Concrete;
 using Microsoft.AspNetCore.Http;
@@ -28,10 +29,22 @@ namespace ECommerceBackend.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get([FromQuery] Pagination pagination)
         {
-            var list = _productReadRepository.GetAll(false);
-            return Ok(list);
+            Thread.Sleep(500);
+            var totalCount = _productReadRepository.GetAll(false).Count();
+            var list = _productReadRepository.GetAll(false).Skip(pagination.Page * pagination.Size).Take(pagination.Size).ToList();
+            //    .Select(p=>new
+            //{
+            //    p.Id,
+            //    p.Name,
+            //    p.UnitInStock,
+            //    p.Price,
+            //});
+            return Ok(new{
+                list,
+                totalCount
+            });
         }
 
         [HttpPost]
