@@ -20,4 +20,8 @@
     <ProjectReference Include="..\..\Infrastructure\ECommerceBackend.Persistence\ECommerceBackend.Persistence.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+
 </Project>
