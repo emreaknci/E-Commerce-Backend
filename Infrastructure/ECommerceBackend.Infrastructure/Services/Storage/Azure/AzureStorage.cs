@@ -17,7 +17,7 @@ namespace ECommerceBackend.Infrastructure.Services.Storage.Azure
         BlobContainerClient _blobContainerClient;
         public AzureStorage(IConfiguration configuration)
         {
-            _blobServiceClient = new(configuration["Storage:Azure"]);
+            _blobServiceClient = new(configuration["Storage:Azure:Key"]);
         }
         public async Task DeleteAsync(string containerName, string fileName)
         {
@@ -51,7 +51,7 @@ namespace ECommerceBackend.Infrastructure.Services.Storage.Azure
 
                 BlobClient blobClient = _blobContainerClient.GetBlobClient(fileNewName);
                 await blobClient.UploadAsync(file.OpenReadStream());
-                datas.Add((fileNewName, containerName));
+                datas.Add((fileNewName, $"{containerName}/{fileNewName}"));
             }
             return datas;
         }

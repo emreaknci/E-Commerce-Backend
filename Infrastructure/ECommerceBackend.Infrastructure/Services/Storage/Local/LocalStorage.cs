@@ -27,7 +27,7 @@ namespace ECommerceBackend.Infrastructure.Services.Storage.Local
             List<bool> results = new();
             foreach (IFormFile file in files)
             {
-                var fileNewName = await FileRenameAsync(path, file.Name, HasFile);
+                var fileNewName = await FileRenameAsync(uploadPath, file.Name, HasFile);
 
                 await CopyFileAsync($"{uploadPath}\\{fileNewName}", file);
                 datas.Add((fileNewName, $"{path}\\{fileNewName}"));
@@ -43,7 +43,11 @@ namespace ECommerceBackend.Infrastructure.Services.Storage.Local
             return dirInfo.GetFiles().Select(f => f.Name).ToList();
         }
 
-        public bool HasFile(string fileName, string path) => File.Exists($"{path}\\{fileName}");
+        public bool HasFile(string path, string fileName)
+        {
+           var x = File.Exists($"{path}\\{fileName}");
+           return x;
+        }
 
         private async Task<bool> CopyFileAsync(string path, IFormFile file)
         {

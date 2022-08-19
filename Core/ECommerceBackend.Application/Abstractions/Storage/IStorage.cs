@@ -13,6 +13,6 @@ namespace ECommerceBackend.Application.Abstractions.Storage
 
         Task DeleteAsync(string fileName, string pathOrContainerName);
         List<string> GetFiles(string pathOrContainerName);
-        bool HasFile(string fileName,string pathOrContainerName);
+        bool HasFile(string pathOrContainerName, string fileName);
     }
 }

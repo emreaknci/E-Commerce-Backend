@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ECommerceBackend.Infrastructure.Services.Storage
 {
-    public class Storage
+     public class Storage
     {
         protected delegate bool HasFile(string pathOrContainerName, string fileName);
         protected async Task<string> FileRenameAsync(string pathOrContainerName, string fileName, HasFile hasFileMethod, bool first = true)
