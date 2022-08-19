@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\resource\" />
+    <Folder Include="wwwroot\" />
   </ItemGroup>
 
 </Project>

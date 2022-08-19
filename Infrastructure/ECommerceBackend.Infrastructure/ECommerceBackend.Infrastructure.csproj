@@ -10,4 +10,8 @@
     <ProjectReference Include="..\..\Core\ECommerceBackend.Application\ECommerceBackend.Application.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Services\Storage\Azure\" />
+  </ItemGroup>
+
 </Project>
