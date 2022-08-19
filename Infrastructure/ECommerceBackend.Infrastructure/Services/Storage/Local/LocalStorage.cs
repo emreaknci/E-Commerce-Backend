@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace ECommerceBackend.Infrastructure.Services.Storage.Local
 {
-    public class LocalStorage : ILocalStorage
+    public class LocalStorage : Storage, ILocalStorage
     {
         private readonly IWebHostEnvironment _webHostEnvironment;
         public LocalStorage(IWebHostEnvironment webHostEnvironment)
@@ -27,13 +27,15 @@ namespace ECommerceBackend.Infrastructure.Services.Storage.Local
             List<bool> results = new();
             foreach (IFormFile file in files)
             {
-                await CopyFileAsync($"{uploadPath}\\{file.Name}", file);
-                datas.Add((file.Name, $"{path}\\{file.Name}"));
+                var fileNewName = await FileRenameAsync(path, file.Name, HasFile);
+
+                await CopyFileAsync($"{uploadPath}\\{fileNewName}", file);
+                datas.Add((fileNewName, $"{path}\\{fileNewName}"));
             }
             return datas;
         }
 
-        public async Task DeleteAsync(string fileName, string path) =>  File.Delete($"{path}\\{fileName}");
+        public async Task DeleteAsync(string fileName, string path) => File.Delete($"{path}\\{fileName}");
 
         public List<string> GetFiles(string path)
         {

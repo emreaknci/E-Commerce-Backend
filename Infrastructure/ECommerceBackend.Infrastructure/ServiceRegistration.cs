@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using ECommerceBackend.Application.Abstractions.Storage;
 using ECommerceBackend.Infrastructure.Enums;
 using ECommerceBackend.Infrastructure.Services.Storage;
+using ECommerceBackend.Infrastructure.Services.Storage.Azure;
 using ECommerceBackend.Infrastructure.Services.Storage.Local;
 
 namespace ECommerceBackend.Infrastructure
@@ -18,7 +19,11 @@ namespace ECommerceBackend.Infrastructure
         {
             serviceCollection.AddScoped<IStorageService, StorageService>();
         }
-        public static void AddStorage(this IServiceCollection serviceCollection,StorageType storageType) 
+        public static void AddStorage<T>(this IServiceCollection serviceCollection) where T : Storage, IStorage
+        {
+            serviceCollection.AddScoped<IStorage, T>();
+        }
+        public static void AddStorage(this IServiceCollection serviceCollection, StorageType storageType)
         {
             switch (storageType)
             {
@@ -26,6 +31,7 @@ namespace ECommerceBackend.Infrastructure
                     serviceCollection.AddScoped<IStorage, LocalStorage>();
                     break;
                 case StorageType.Azure:
+                    serviceCollection.AddScoped<IStorage, AzureStorage>();
                     break;
                 case StorageType.AWS:
                     break;
@@ -33,12 +39,6 @@ namespace ECommerceBackend.Infrastructure
                     serviceCollection.AddScoped<IStorage, LocalStorage>();
                     break;
             }
-
-        }
-        public static void AddStorage<T>(this IServiceCollection serviceCollection) where T:class, IStorage
-        {
-            serviceCollection.AddScoped<IStorage, T>();
-
         }
     }
 }
