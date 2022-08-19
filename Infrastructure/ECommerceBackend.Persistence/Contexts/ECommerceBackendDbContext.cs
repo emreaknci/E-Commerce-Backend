@@ -7,6 +7,7 @@ using ECommerceBackend.Domain.Entities.Common;
 using ECommerceBackend.Domain.Entities.Concrete;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using File = ECommerceBackend.Domain.Entities.Concrete.File;
 
 namespace ECommerceBackend.Persistence.Contexts
 {
@@ -31,7 +32,9 @@ namespace ECommerceBackend.Persistence.Contexts
             }
             return await base.SaveChangesAsync(cancellationToken);
         }
-
+        public DbSet<File> Files { get; set; }
+        public DbSet<ProductImageFile> ProductImageFiles { get; set; }
+        public DbSet<InvoiceFile> InvoiceFiles { get; set; }
         public DbSet<Product>? Products { get; set; }
         public DbSet<Order>? Orders { get; set; }
         public DbSet<Customer>? Customers { get; set; }

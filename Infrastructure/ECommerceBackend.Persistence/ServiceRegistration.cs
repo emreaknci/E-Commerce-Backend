@@ -8,6 +8,9 @@ using ECommerceBackend.Persistence.Contexts;
 using ECommerceBackend.Persistence.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
+using ECommerceBackend.Application.Repositories.File;
+using ECommerceBackend.Persistence.Repositories.File.InvoiceFile;
+using ECommerceBackend.Persistence.Repositories.File.ProductImageFile;
 
 namespace ECommerceBackend.Persistence
 {
@@ -25,6 +28,15 @@ namespace ECommerceBackend.Persistence
                      
             services.AddScoped<IProductReadRepository, ProductReadRepository>();
             services.AddScoped<IProductWriteRepository, ProductWriteRepository>();
+
+            services.AddScoped<IFileReadRepository, FileReadRepository>();
+            services.AddScoped<IFileWriteRepository, FileWriteRepository>();
+
+            services.AddScoped<IProductImageFileReadRepository, ProductImageFileReadRepository>();
+            services.AddScoped<IProductImageFileWriteRepository, ProductImageFileWriteRepository>();
+
+            services.AddScoped<IInvoiceFileReadRepository, InvoiceFileReadRepository>();
+            services.AddScoped<IInvoiceFileWriteRepository, InvoiceFileWriteRepository>();
         }
     }
 }

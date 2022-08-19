@@ -3,6 +3,7 @@ using System;
 using ECommerceBackend.Persistence.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ECommerceBackend.Persistence.Migrations
 {
     [DbContext(typeof(ECommerceBackendDbContext))]
-    partial class ECommerceBackendDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220818093752_Mig_3")]
+    partial class Mig_3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -41,34 +43,6 @@ namespace ECommerceBackend.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Customers");
-                });
-
-            modelBuilder.Entity("ECommerceBackend.Domain.Entities.Concrete.File", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("FileName")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Path")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Files");
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("File");
                 });
 
             modelBuilder.Entity("ECommerceBackend.Domain.Entities.Concrete.Order", b =>
@@ -141,23 +115,6 @@ namespace ECommerceBackend.Persistence.Migrations
                     b.HasIndex("ProductsId");
 
                     b.ToTable("OrderProduct");
-                });
-
-            modelBuilder.Entity("ECommerceBackend.Domain.Entities.Concrete.InvoiceFile", b =>
-                {
-                    b.HasBaseType("ECommerceBackend.Domain.Entities.Concrete.File");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("numeric");
-
-                    b.HasDiscriminator().HasValue("InvoiceFile");
-                });
-
-            modelBuilder.Entity("ECommerceBackend.Domain.Entities.Concrete.ProductImageFile", b =>
-                {
-                    b.HasBaseType("ECommerceBackend.Domain.Entities.Concrete.File");
-
-                    b.HasDiscriminator().HasValue("ProductImageFile");
                 });
 
             modelBuilder.Entity("ECommerceBackend.Domain.Entities.Concrete.Order", b =>
