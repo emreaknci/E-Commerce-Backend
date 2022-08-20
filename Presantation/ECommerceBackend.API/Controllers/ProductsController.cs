@@ -1,11 +1,14 @@
 ﻿using System.Net;
 using ECommerceBackend.Application.Abstractions.Storage;
+using ECommerceBackend.Application.Features.Commands.CreateProduct;
+using ECommerceBackend.Application.Features.Queries.GetAllProduct;
 using ECommerceBackend.Application.Repositories;
 using ECommerceBackend.Application.Repositories.File;
 using ECommerceBackend.Application.RequestParameters;
 
 using ECommerceBackend.Application.ViewModels.Products;
 using ECommerceBackend.Domain.Entities.Concrete;
+using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -29,7 +32,9 @@ namespace ECommerceBackend.API.Controllers
 
         private readonly IConfiguration _configuration;
 
-        public ProductsController(IProductWriteRepository productWriteRepository, IProductReadRepository productReadRepository, IFileWriteRepository fileWriteRepository, IFileReadRepository fileReadRepository, IProductImageFileReadRepository productImageFileReadRepository, IProductImageFileWriteRepository productImageFileWriteRepository, IInvoiceFileReadRepository invoiceFileReadRepository, IInvoiceFileWriteRepository invoiceFileWriteRepository, IStorageService storageService, IConfiguration configuration)
+
+        private readonly IMediator _mediator;
+        public ProductsController(IProductWriteRepository productWriteRepository, IProductReadRepository productReadRepository, IFileWriteRepository fileWriteRepository, IFileReadRepository fileReadRepository, IProductImageFileReadRepository productImageFileReadRepository, IProductImageFileWriteRepository productImageFileWriteRepository, IInvoiceFileReadRepository invoiceFileReadRepository, IInvoiceFileWriteRepository invoiceFileWriteRepository, IStorageService storageService, IConfiguration configuration, IMediator mediator)
         {
             _productWriteRepository = productWriteRepository;
             _productReadRepository = productReadRepository;
@@ -41,6 +46,7 @@ namespace ECommerceBackend.API.Controllers
             _invoiceFileWriteRepository = invoiceFileWriteRepository;
             _storageService = storageService;
             _configuration = configuration;
+            _mediator = mediator;
         }
 
         [HttpGet("{id}")]
@@ -51,36 +57,18 @@ namespace ECommerceBackend.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get([FromQuery] Pagination pagination)
+        public async Task<IActionResult> Get([FromQuery] GetAllProductQueryRequest request)
         {
             Thread.Sleep(750);
-            var totalCount = _productReadRepository.GetAll(false).Count();
-            var list = _productReadRepository.GetAll(false).Skip(pagination.Page * pagination.Size).Take(pagination.Size).ToList();
-            //    .Select(p=>new
-            //{
-            //    p.Id,
-            //    p.Name,
-            //    p.UnitInStock,
-            //    p.Price,
-            //});
-            return Ok(new
-            {
-                list,
-                totalCount
-            });
+            var response = await _mediator.Send(request);
+            return Ok(response);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(VM_Create_Product model)
+        public async Task<IActionResult> Post(CreateProductCommandRequest request)
         {
 
-            await _productWriteRepository.AddAsync(new()
-            {
-                Name = model.Name,
-                Price = model.Price,
-                UnitInStock = model.UnitInStock
-            });
-            await _productWriteRepository.SaveAsync();
+            var response = await _mediator.Send(request);
             return StatusCode((int)HttpStatusCode.Created);
 
         }
