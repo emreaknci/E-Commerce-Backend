@@ -1,7 +1,8 @@
-﻿using ECommerceBackend.Application.Repositories;
+﻿
+using ECommerceBackend.Application.Repositories;
 using MediatR;
 
-namespace ECommerceBackend.Application.Features.Commands.CreateProduct;
+namespace ECommerceBackend.Application.Features.Commands.Product.CreateProduct;
 
 public class CreateProductCommandHandler:IRequestHandler<CreateProductCommandRequest,CreateProductCommandResponse>
 {

@@ -1,4 +1,4 @@
-﻿namespace ECommerceBackend.Application.Features.Queries.GetAllProduct;
+﻿namespace ECommerceBackend.Application.Features.Queries.Product.GetAllProduct;
 
 public class GetAllProductQueryResponse
 {

@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using MediatR;
 
-namespace ECommerceBackend.Application.Features.Commands.CreateProduct
+namespace ECommerceBackend.Application.Features.Queries.Product.GetByIdProduct
 {
-    public class CreateProductCommandRequest:IRequest<CreateProductCommandResponse>
+    public class GetByIdProductQueryResponse
     {
         public string Name { get; set; } = null!;
         public int UnitInStock { get; set; }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using ECommerceBackend.Application.RequestParameters;
 using MediatR;
 
-namespace ECommerceBackend.Application.Features.Queries.GetAllProduct
+namespace ECommerceBackend.Application.Features.Queries.Product.GetAllProduct
 {
     public class GetAllProductQueryRequest :IRequest<GetAllProductQueryResponse>
     {
