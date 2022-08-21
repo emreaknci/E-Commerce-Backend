@@ -5,13 +5,15 @@ using System.Text;
 using System.Threading.Tasks;
 using ECommerceBackend.Domain.Entities.Common;
 using ECommerceBackend.Domain.Entities.Concrete;
+using ECommerceBackend.Domain.Entities.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using File = ECommerceBackend.Domain.Entities.Concrete.File;
 
 namespace ECommerceBackend.Persistence.Contexts
 {
-    public class ECommerceBackendDbContext : DbContext
+    public class ECommerceBackendDbContext : IdentityDbContext<AppUser,AppRole,string>
     {
         public ECommerceBackendDbContext(DbContextOptions options) : base(options)
         {

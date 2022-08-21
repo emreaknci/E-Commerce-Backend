@@ -9,6 +9,7 @@ using ECommerceBackend.Persistence.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using ECommerceBackend.Application.Repositories.File;
+using ECommerceBackend.Domain.Entities.Identity;
 using ECommerceBackend.Persistence.Repositories.File.InvoiceFile;
 using ECommerceBackend.Persistence.Repositories.File.ProductImageFile;
 
@@ -19,6 +20,15 @@ namespace ECommerceBackend.Persistence
         public static void AddPersistenceServices(this IServiceCollection services)
         {
             services.AddDbContext<ECommerceBackendDbContext>(options => options.UseNpgsql(Configuration.ConnectionString()));
+            services.AddIdentity<AppUser, AppRole>(options =>
+            {
+                options.Password.RequiredLength = 3;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireDigit = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireUppercase = false;
+
+            }).AddEntityFrameworkStores<ECommerceBackendDbContext>();
 
             services.AddScoped<ICustomerReadRepository, CustomerReadRepository>();
             services.AddScoped<ICustomerWriteRepository, CustomerWriteRepository>();
