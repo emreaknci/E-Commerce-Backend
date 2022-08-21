@@ -13,6 +13,7 @@ namespace ECommerceBackend.Application
         public static void AddApplicationService(this IServiceCollection collection)
         {
             collection.AddMediatR(typeof(ServiceRegistration));
+            collection.AddHttpClient();
         }
     }
 }
