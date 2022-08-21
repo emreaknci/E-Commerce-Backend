@@ -8,6 +8,7 @@ using ECommerceBackend.Application.Features.Queries.Product.GetAllProduct;
 using ECommerceBackend.Application.Features.Queries.Product.GetByIdProduct;
 using ECommerceBackend.Application.Features.Queries.ProductImageFile.GetProductImage;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 
@@ -15,6 +16,7 @@ namespace ECommerceBackend.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = "Admin")]
     public class ProductsController : ControllerBase
     {
         private readonly IMediator _mediator;

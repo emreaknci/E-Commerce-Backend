@@ -1,4 +1,5 @@
-﻿using ECommerceBackend.Application.Exceptions;
+﻿using ECommerceBackend.Application.Abstractions.Token;
+using ECommerceBackend.Application.Exceptions;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 
@@ -8,11 +9,12 @@ public class LoginUserCommandHandler : IRequestHandler<LoginUserCommandRequest, 
 {
     private readonly UserManager<Domain.Entities.Identity.AppUser> _userManager;
     private readonly SignInManager<Domain.Entities.Identity.AppUser> _signInManager;
-
-    public LoginUserCommandHandler(UserManager<Domain.Entities.Identity.AppUser> userManager, SignInManager<Domain.Entities.Identity.AppUser> signInManager)
+    private readonly ITokenHandler _tokenHandler;
+    public LoginUserCommandHandler(UserManager<Domain.Entities.Identity.AppUser> userManager, SignInManager<Domain.Entities.Identity.AppUser> signInManager, ITokenHandler tokenHandler)
     {
         _userManager = userManager;
         _signInManager = signInManager;
+        _tokenHandler = tokenHandler;
     }
 
     public async Task<LoginUserCommandResponse> Handle(LoginUserCommandRequest request, CancellationToken cancellationToken)
@@ -23,15 +25,16 @@ public class LoginUserCommandHandler : IRequestHandler<LoginUserCommandRequest, 
         var result = await _signInManager.CheckPasswordSignInAsync(user, request.Password, false);
         if (result.Succeeded)
         {
-            //todo yetkiler belirlenecek
-            return new()
+            var token = _tokenHandler.CreateAccessToken(5);
+            return new LoginUserCommandSuccessResponse()
             {
                 Message = "Giriş başarılı!",
-                Success = true
+                Success = true,
+                Token = token
             };
         }
 
-        return new()
+        return new LoginUserCommandErrorResponse()
         {
             Success = false,
             Message = "Kullanıcı adı veya şifre hatalı!"
