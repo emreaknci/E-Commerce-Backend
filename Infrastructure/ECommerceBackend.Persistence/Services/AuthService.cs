@@ -17,6 +17,7 @@ using ECommerceBackend.Domain.Entities.Identity;
 using Google.Apis.Auth;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
 namespace ECommerceBackend.Persistence.Services
@@ -27,13 +28,15 @@ namespace ECommerceBackend.Persistence.Services
         private readonly IConfiguration _configuration;
         private readonly UserManager<Domain.Entities.Identity.AppUser> _userManager;
         private readonly ITokenHandler _tokenHandler;
-        readonly SignInManager<AppUser> _signInManager;
-        public AuthService(IHttpClientFactory httpClientFactory, IConfiguration configuration, UserManager<AppUser> userManager, ITokenHandler tokenHandler, SignInManager<AppUser> signInManager)
+        private readonly SignInManager<AppUser> _signInManager;
+        private readonly IUserService _userService;
+        public AuthService(IHttpClientFactory httpClientFactory, IConfiguration configuration, UserManager<AppUser> userManager, ITokenHandler tokenHandler, SignInManager<AppUser> signInManager, IUserService userService)
         {
             _configuration = configuration;
             _userManager = userManager;
             _tokenHandler = tokenHandler;
             _signInManager = signInManager;
+            _userService = userService;
             _httpClient = httpClientFactory.CreateClient();
         }
 
@@ -66,6 +69,7 @@ namespace ECommerceBackend.Persistence.Services
             {
                 await _userManager.AddLoginAsync(user, info); //AspNetUserLogins
                 Token token = _tokenHandler.CreateAccessToken(accessTokenLifeTimeInSeconds);
+                await _userService.UpdateRefreshToken(token.RefreshToken, user, token.Expiration, 15);
                 return token;
             }
 
@@ -91,7 +95,7 @@ namespace ECommerceBackend.Persistence.Services
 
             }
             else
-            throw new Exception("Invalid external authentication.");
+                throw new Exception("Invalid external authentication.");
         }
 
         public async Task<Token> GoogleLoginAsync(string idToken, int accessTokenLifeTimeInSeconds)
@@ -110,7 +114,7 @@ namespace ECommerceBackend.Persistence.Services
 
         }
 
-        public async Task<Token> LoginAsync(string userNameOrEmail, string password,int accessTokenLifeTimeInSeconds)
+        public async Task<Token> LoginAsync(string userNameOrEmail, string password, int accessTokenLifeTimeInSeconds)
         {
             var user = await _userManager.FindByNameAsync(userNameOrEmail) ?? await _userManager.FindByEmailAsync(userNameOrEmail);
             if (user == null) throw new NotFoundUserException();
@@ -119,10 +123,25 @@ namespace ECommerceBackend.Persistence.Services
             if (result.Succeeded)
             {
                 var token = _tokenHandler.CreateAccessToken(accessTokenLifeTimeInSeconds);
+                await _userService.UpdateRefreshToken(token.RefreshToken, user, token.Expiration, 15);
                 return token;
             }
 
             throw new Exception("Kullanıcı adı veya şifre hatalı!");
+        }
+
+        public async Task<Token> RefreshTokenLoginAsync(string refreshToken)
+        {
+            var user = await _userManager.Users.FirstOrDefaultAsync(u => u.RefreshToken == refreshToken);
+            if (user != null && user?.RefreshTokenEndDate > DateTime.UtcNow)
+            {
+                var token = _tokenHandler.CreateAccessToken(15);
+                await _userService.UpdateRefreshToken(refreshToken, user, token.Expiration, 15);
+                return token;
+            }
+
+            throw new NotFoundUserException();
+
         }
     }
 }

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ECommerceBackend.Application.Abstractions.Services;
 using ECommerceBackend.Application.DTOs.User;
+using ECommerceBackend.Application.Exceptions;
 using ECommerceBackend.Application.Features.Commands.AppUser.CreateUser;
 using ECommerceBackend.Domain.Entities.Identity;
 using MediatR;
@@ -12,7 +13,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace ECommerceBackend.Persistence.Services
 {
-    public class UserService:IUserService
+    public class UserService : IUserService
     {
         private readonly UserManager<AppUser> _userManager;
 
@@ -39,6 +40,22 @@ namespace ECommerceBackend.Persistence.Services
                 foreach (var error in result.Errors)
                     response.Message += $"{error.Code} - {error.Description}\n ";
             return response;
+        }
+
+        public async Task UpdateRefreshToken(string refreshToken, AppUser user,
+            DateTime accessTokenDate, int refreshTokenLifeTimeInSeconds)
+        {
+            if (user != null)
+            {
+                user.RefreshToken = refreshToken;
+                user.RefreshTokenEndDate = accessTokenDate.AddSeconds(refreshTokenLifeTimeInSeconds);
+
+                await _userManager.UpdateAsync(user);
+            }
+            else
+                throw new NotFoundUserException();
+
+
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using ECommerceBackend.Application.Abstractions.Token;
@@ -41,14 +42,21 @@ namespace ECommerceBackend.Infrastructure.Services.Token
                 //claims: new List<Claim> { new(ClaimTypes.Name, user.UserName) }
             );
 
-            //Token oluşturucu sınıfından bir örnek alalım.
+            //Token oluşturucu sınıf
             JwtSecurityTokenHandler tokenHandler = new();
             token.AccessToken = tokenHandler.WriteToken(securityToken);
 
-            //string refreshToken = CreateRefreshToken();
-
-            //token.RefreshToken = CreateRefreshToken();
+            token.RefreshToken = CreateRefreshToken();
             return token;
+        }
+
+        public string CreateRefreshToken()
+        {
+            byte[] number = new byte[32];
+            using var random= RandomNumberGenerator.Create();
+            random.GetBytes(number);
+            return Convert.ToBase64String(number);
+
         }
     }
 }
