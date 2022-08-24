@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ECommerceBackend.Application.Abstractions.Services;
+using ECommerceBackend.Application.Abstractions.Services.Authentication;
 using ECommerceBackend.Application.Repositories;
 using ECommerceBackend.Persistence.Contexts;
 using ECommerceBackend.Persistence.Repositories;
@@ -12,6 +14,7 @@ using ECommerceBackend.Application.Repositories.File;
 using ECommerceBackend.Domain.Entities.Identity;
 using ECommerceBackend.Persistence.Repositories.File.InvoiceFile;
 using ECommerceBackend.Persistence.Repositories.File.ProductImageFile;
+using ECommerceBackend.Persistence.Services;
 
 namespace ECommerceBackend.Persistence
 {
@@ -47,6 +50,12 @@ namespace ECommerceBackend.Persistence
 
             services.AddScoped<IInvoiceFileReadRepository, InvoiceFileReadRepository>();
             services.AddScoped<IInvoiceFileWriteRepository, InvoiceFileWriteRepository>();
+
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IInternalAuthentication, AuthService>();
+            services.AddScoped<IExternalAuthentication, AuthService>();
+
         }
     }
 }

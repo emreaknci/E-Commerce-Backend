@@ -9,8 +9,7 @@ namespace ECommerceBackend.Application.Features.Commands.AppUser.LoginUser
 {
     public class LoginUserCommandResponse
     {
-        public string Message { get; set; }
-        public bool Success { get; set; }
+        public Token Token { get; set; }
 
     }
 }

@@ -21,7 +21,7 @@ namespace ECommerceBackend.Infrastructure.Services.Token
         {
             _configuration = configuration;
         }
-        public T.Token CreateAccessToken(int minute)
+        public T.Token CreateAccessToken(int second)
         {
             T.Token token = new ();
             //Security Key'in simetriğini alıyoruz.
@@ -31,7 +31,7 @@ namespace ECommerceBackend.Infrastructure.Services.Token
             SigningCredentials signingCredentials = new(securityKey, SecurityAlgorithms.HmacSha256);
 
             //Oluşturulacak token ayarlarını veriyoruz.
-            token.Expiration = DateTime.UtcNow.AddMinutes(minute);
+            token.Expiration = DateTime.UtcNow.AddSeconds(second);
             JwtSecurityToken securityToken = new(
                 audience: _configuration["Token:Audience"],
                 issuer: _configuration["Token:Issuer"],
