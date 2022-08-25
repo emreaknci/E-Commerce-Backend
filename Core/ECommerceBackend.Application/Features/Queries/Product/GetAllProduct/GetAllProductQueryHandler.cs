@@ -21,7 +21,6 @@ public class GetAllProductQueryHandler : IRequestHandler<GetAllProductQueryReque
         var totalCount = _productReadRepository.GetAll(false).Count();
         var products = _productReadRepository.GetAll(false).Skip(request.Page * request.Size).Take(request.Size).ToList();
         _logger.LogInformation("Tüm ürünler listelendi");
-        throw new Exception("hata var kardeş");
         return new()
         {
             Products = products,

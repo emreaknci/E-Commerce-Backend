@@ -10,6 +10,8 @@ using ECommerceBackend.Infrastructure.Enums;
 using ECommerceBackend.Infrastructure.Services.Storage.Azure;
 using ECommerceBackend.Infrastructure.Services.Storage.Local;
 using ECommerceBackend.Persistence;
+using ECommerceBackend.SignalR;
+using ECommerceBackend.SignalR.Hubs;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -24,12 +26,13 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddPersistenceServices();
 builder.Services.AddInfrastructureServices();
 builder.Services.AddApplicationService();
+builder.Services.AddSignalRService();
 
 //builder.Services.AddStorage(StorageType.Azure);
 builder.Services.AddStorage<AzureStorage>();
 
 builder.Services.AddCors(options => options.AddDefaultPolicy(policy
-    => policy.WithOrigins("http://localhost:4200", "https://localhost:4200").AllowAnyHeader().AllowAnyMethod()
+    => policy.WithOrigins("http://localhost:4200", "https://localhost:4200").AllowAnyHeader().AllowAnyMethod().AllowCredentials()
     ));
 
 builder.Services.AddControllers(options => options.Filters.Add<ValidationFilter>())
@@ -109,5 +112,5 @@ app.Use(async (context, next) =>
     await next();
 });
 app.MapControllers();
-
+app.MapHubs();
 app.Run();

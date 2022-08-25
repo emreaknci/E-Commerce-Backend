@@ -135,8 +135,8 @@ namespace ECommerceBackend.Persistence.Services
             var user = await _userManager.Users.FirstOrDefaultAsync(u => u.RefreshToken == refreshToken);
             if (user != null && user?.RefreshTokenEndDate > DateTime.UtcNow)
             {
-                var token = _tokenHandler.CreateAccessToken(15,user);
-                await _userService.UpdateRefreshToken(refreshToken, user, token.Expiration, 15);
+                var token = _tokenHandler.CreateAccessToken(900,user);
+                await _userService.UpdateRefreshToken(refreshToken, user, token.Expiration, 300);
                 return token;
             }
 
