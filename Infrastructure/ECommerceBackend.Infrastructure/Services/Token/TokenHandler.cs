@@ -22,7 +22,7 @@ namespace ECommerceBackend.Infrastructure.Services.Token
         {
             _configuration = configuration;
         }
-        public T.Token CreateAccessToken(int second)
+        public T.Token CreateAccessToken(int second,AppUser user)
         {
             T.Token token = new ();
             //Security Key'in simetriğini alıyoruz.
@@ -38,8 +38,8 @@ namespace ECommerceBackend.Infrastructure.Services.Token
                 issuer: _configuration["Token:Issuer"],
                 expires: token.Expiration,
                 notBefore: DateTime.UtcNow,
-                signingCredentials: signingCredentials
-                //claims: new List<Claim> { new(ClaimTypes.Name, user.UserName) }
+                signingCredentials: signingCredentials,
+                claims: new List<Claim> { new(ClaimTypes.Name, user.UserName) }
             );
 
             //Token oluşturucu sınıf
