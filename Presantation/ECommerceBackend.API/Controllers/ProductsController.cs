@@ -2,6 +2,7 @@
 using ECommerceBackend.Application.Features.Commands.Product.CreateProduct;
 using ECommerceBackend.Application.Features.Commands.Product.RemoveProduct;
 using ECommerceBackend.Application.Features.Commands.Product.UpdateProduct;
+using ECommerceBackend.Application.Features.Commands.ProductImageFile.ChangeShowcaseImage;
 using ECommerceBackend.Application.Features.Commands.ProductImageFile.RemoveProductImage;
 using ECommerceBackend.Application.Features.Commands.ProductImageFile.UploadProductImage;
 using ECommerceBackend.Application.Features.Queries.Product.GetAllProduct;
@@ -16,7 +17,7 @@ namespace ECommerceBackend.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(AuthenticationSchemes = "Admin")]
+ 
     public class ProductsController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -37,12 +38,13 @@ namespace ECommerceBackend.API.Controllers
         [HttpGet]
         public async Task<IActionResult> Get([FromQuery] GetAllProductQueryRequest request)
         {
-            Thread.Sleep(750);
+            //Thread.Sleep(750);
             var response = await _mediator.Send(request);
             return Ok(response);
         }
 
         [HttpPost]
+        [Authorize(AuthenticationSchemes = "Admin")]
         public async Task<IActionResult> Post(CreateProductCommandRequest request)
         {
 
@@ -52,6 +54,7 @@ namespace ECommerceBackend.API.Controllers
         }
 
         [HttpPut]
+        [Authorize(AuthenticationSchemes = "Admin")]
         public async Task<IActionResult> Put([FromBody] UpdateProductCommandRequest updateProductCommandRequest)
         {
             var response = await _mediator.Send(updateProductCommandRequest);
@@ -59,6 +62,7 @@ namespace ECommerceBackend.API.Controllers
         }
 
         [HttpDelete("{Id}")]
+        [Authorize(AuthenticationSchemes = "Admin")]
         public async Task<IActionResult> Delete([FromRoute] RemoveProductCommandRequest removeProductCommandRequest)
         {
             RemoveProductCommandResponse response = await _mediator.Send(removeProductCommandRequest);
@@ -66,6 +70,7 @@ namespace ECommerceBackend.API.Controllers
         }
 
         [HttpPost("[action]")]
+        [Authorize(AuthenticationSchemes = "Admin")]
         public async Task<IActionResult> Upload([FromQuery] UploadProductImageCommandRequest request)
         {
             request.Files = Request.Form.Files;
@@ -81,14 +86,19 @@ namespace ECommerceBackend.API.Controllers
         }
 
         [HttpDelete("[action]/{id}")]
+        [Authorize(AuthenticationSchemes = "Admin")]
         public async Task<IActionResult> DeleteImage([FromRoute] RemoveProductImageCommandRequest request, [FromQuery] string imageId)
         {
-            //Ders sonrası not !
-            //Burada RemoveProductImageCommandRequest sınıfı içerisindeki ImageId property'sini de 'FromQuery' attribute'u ile işaretleyebilirdik!
-
             request.ImageId = imageId;
             var response = await _mediator.Send(request);
             return Ok();
+        }
+        [HttpGet("[action]")]
+        [Authorize(AuthenticationSchemes = "Admin")]
+        public async Task<IActionResult> ChangeShowcaseImage([FromQuery] ChangeShowcaseImageCommandRequest changeShowcaseImageCommandRequest)
+        {
+            var response = await _mediator.Send(changeShowcaseImageCommandRequest);
+            return Ok(response);
         }
     }
 }
