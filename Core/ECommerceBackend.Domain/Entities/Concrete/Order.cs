@@ -8,6 +8,8 @@ public class Order : BaseEntity
     public string Description { get; set; } = null!;
     public string Address { get; set; } = null!;
 
-    public virtual Customer Customer { get; set; } = null!;
+    public virtual Customer Customer { get; set; } = null!; 
+    public virtual Basket Basket { get; set; } = null!;
+
     public virtual ICollection<Product> Products { get; set; } = null!;
 }

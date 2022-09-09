@@ -21,7 +21,7 @@ namespace ECommerceBackend.API.Controllers
     public class ProductsController : ControllerBase
     {
         private readonly IMediator _mediator;
-
+  
         public ProductsController(IMediator mediator)
         {
             _mediator = mediator;
