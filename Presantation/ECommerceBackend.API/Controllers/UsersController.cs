@@ -13,12 +13,10 @@ namespace ECommerceBackend.API.Controllers
     [ApiController]
     public class UsersController : BaseController
     {
-
-
         [HttpPost]
         public async Task<IActionResult> CreateUser(CreateUserCommandRequest request)
         {
-            var response = await Mediator.Send(request);
+            var response = await Mediator!.Send(request);
             return Ok(response);
         }
 

@@ -17,21 +17,14 @@ namespace ECommerceBackend.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
- 
-    public class ProductsController : ControllerBase
-    {
-        private readonly IMediator _mediator;
-  
-        public ProductsController(IMediator mediator)
-        {
-            _mediator = mediator;
-        }
 
+    public class ProductsController : BaseController
+    {
 
         [HttpGet("{Id}")]
-        public async Task<IActionResult> Get([FromRoute]GetByIdProductQueryRequest request)
+        public async Task<IActionResult> Get([FromRoute] GetByIdProductQueryRequest request)
         {
-            var response = await _mediator.Send(request);
+            var response = await Mediator!.Send(request);
             return Ok(response);
         }
 
@@ -39,7 +32,7 @@ namespace ECommerceBackend.API.Controllers
         public async Task<IActionResult> Get([FromQuery] GetAllProductQueryRequest request)
         {
             //Thread.Sleep(750);
-            var response = await _mediator.Send(request);
+            var response = await Mediator!.Send(request);
             return Ok(response);
         }
 
@@ -48,7 +41,7 @@ namespace ECommerceBackend.API.Controllers
         public async Task<IActionResult> Post(CreateProductCommandRequest request)
         {
 
-            var response = await _mediator.Send(request);
+            var response = await Mediator!.Send(request);
             return StatusCode((int)HttpStatusCode.Created);
 
         }
@@ -57,7 +50,7 @@ namespace ECommerceBackend.API.Controllers
         [Authorize(AuthenticationSchemes = "Admin")]
         public async Task<IActionResult> Put([FromBody] UpdateProductCommandRequest updateProductCommandRequest)
         {
-            var response = await _mediator.Send(updateProductCommandRequest);
+            var response = await Mediator!.Send(updateProductCommandRequest);
             return Ok(response);
         }
 
@@ -65,7 +58,7 @@ namespace ECommerceBackend.API.Controllers
         [Authorize(AuthenticationSchemes = "Admin")]
         public async Task<IActionResult> Delete([FromRoute] RemoveProductCommandRequest removeProductCommandRequest)
         {
-            RemoveProductCommandResponse response = await _mediator.Send(removeProductCommandRequest);
+            RemoveProductCommandResponse response = await Mediator!.Send(removeProductCommandRequest);
             return Ok();
         }
 
@@ -74,14 +67,14 @@ namespace ECommerceBackend.API.Controllers
         public async Task<IActionResult> Upload([FromQuery] UploadProductImageCommandRequest request)
         {
             request.Files = Request.Form.Files;
-            var response = await _mediator.Send(request);
+            var response = await Mediator!.Send(request);
             return Ok(response);
         }
 
         [HttpGet("[action]/{id}")]
         public async Task<IActionResult> GetImages([FromRoute] GetProductImagesQueryRequest getProductImagesQueryRequest)
         {
-            var response = await _mediator.Send(getProductImagesQueryRequest);
+            var response = await Mediator!.Send(getProductImagesQueryRequest);
             return Ok(response);
         }
 
@@ -90,14 +83,14 @@ namespace ECommerceBackend.API.Controllers
         public async Task<IActionResult> DeleteImage([FromRoute] RemoveProductImageCommandRequest request, [FromQuery] string imageId)
         {
             request.ImageId = imageId;
-            var response = await _mediator.Send(request);
+            var response = await Mediator!.Send(request);
             return Ok();
         }
         [HttpGet("[action]")]
         [Authorize(AuthenticationSchemes = "Admin")]
         public async Task<IActionResult> ChangeShowcaseImage([FromQuery] ChangeShowcaseImageCommandRequest changeShowcaseImageCommandRequest)
         {
-            var response = await _mediator.Send(changeShowcaseImageCommandRequest);
+            var response = await Mediator!.Send(changeShowcaseImageCommandRequest);
             return Ok(response);
         }
     }

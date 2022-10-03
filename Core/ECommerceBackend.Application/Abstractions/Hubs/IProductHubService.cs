@@ -10,4 +10,8 @@ namespace ECommerceBackend.Application.Abstractions.Hubs
     {
         Task ProductAddedMessageAsync(string message);
     }
+    public interface IOrderHubService
+    {
+        Task OrderCreatedMessageAsync(string message);
+    }
 }

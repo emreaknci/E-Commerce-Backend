@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.SignalR;
 
 namespace ECommerceBackend.SignalR.HubServcices
 {
-    public class ProductHubService: IProductHubService
+    public class ProductHubService : IProductHubService
     {
         readonly IHubContext<ProductHub> _hubContext;
 

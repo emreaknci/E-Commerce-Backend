@@ -112,6 +112,15 @@ namespace ECommerceBackend.Persistence.Services
             }
         }
 
+        public Basket? GetUserActiveBasket
+        {
+            get
+            {
+                Basket? basket = ContextUser().Result;
+                return basket;
+            }
+        }
+
         public async Task UpdateQuantityAsync(VM_Update_BasketItem basketItem)
         {
             BasketItem? _basketItem = await _basketItemReadRepository.GetByIdAsync(basketItem.BasketItemId);

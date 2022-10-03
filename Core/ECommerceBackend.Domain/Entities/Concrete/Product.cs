@@ -12,7 +12,7 @@ namespace ECommerceBackend.Domain.Entities.Concrete
         public string Name { get; set; } = null!;
         public int UnitInStock { get; set; }
         public decimal Price { get; set; }
-        public virtual ICollection<Order> Orders { get; set; } = null!;
+        //public virtual ICollection<Order> Orders { get; set; } = null!;
         public virtual ICollection<ProductImageFile> Images  { get; set; } = null!;
         public virtual ICollection<BasketItem> BasketItems  { get; set; } = null!;
 

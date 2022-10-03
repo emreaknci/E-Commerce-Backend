@@ -5,7 +5,7 @@ namespace ECommerceBackend.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class FilesController : ControllerBase
+    public class FilesController : BaseController
     {
         readonly IConfiguration _configuration;
 
