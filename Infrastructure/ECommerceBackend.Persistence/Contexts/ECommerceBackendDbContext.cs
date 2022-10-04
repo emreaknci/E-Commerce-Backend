@@ -14,7 +14,7 @@ using File = ECommerceBackend.Domain.Entities.Concrete.File;
 
 namespace ECommerceBackend.Persistence.Contexts
 {
-    public class ECommerceBackendDbContext : IdentityDbContext<AppUser,AppRole,string>
+    public class ECommerceBackendDbContext : IdentityDbContext<AppUser, AppRole, string>
     {
         public ECommerceBackendDbContext(DbContextOptions options) : base(options)
         {
@@ -25,6 +25,10 @@ namespace ECommerceBackend.Persistence.Contexts
         {
             builder.Entity<Order>()
                 .HasKey(b => b.Id);
+
+            builder.Entity<Order>()
+                .HasIndex(o => o.OrderCode)
+                .IsUnique();
 
             builder.Entity<Basket>()
                 .HasOne(b => b.Order)
@@ -40,9 +44,9 @@ namespace ECommerceBackend.Persistence.Contexts
             {
                 _ = data.State switch
                 {
-                    EntityState.Added=>data.Entity.CreatedDate=DateTime.UtcNow,
-                    EntityState.Modified=>data.Entity.UpdatedDate=DateTime.UtcNow,
-                    _=>DateTime.UtcNow,
+                    EntityState.Added => data.Entity.CreatedDate = DateTime.UtcNow,
+                    EntityState.Modified => data.Entity.UpdatedDate = DateTime.UtcNow,
+                    _ => DateTime.UtcNow,
                 };
             }
             return await base.SaveChangesAsync(cancellationToken);
