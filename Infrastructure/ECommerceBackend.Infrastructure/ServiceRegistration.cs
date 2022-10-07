@@ -12,6 +12,7 @@ using ECommerceBackend.Infrastructure.Services.Storage;
 using ECommerceBackend.Infrastructure.Services.Storage.Azure;
 using ECommerceBackend.Infrastructure.Services.Storage.Local;
 using ECommerceBackend.Infrastructure.Services.Token;
+using ECommerceBackend.Application.Abstractions.Services;
 
 namespace ECommerceBackend.Infrastructure
 {
@@ -21,10 +22,11 @@ namespace ECommerceBackend.Infrastructure
         {
             serviceCollection.AddScoped<IStorageService, StorageService>();
             serviceCollection.AddScoped<ITokenHandler, TokenHandler>();
+            serviceCollection.AddScoped<IMailService, MailService>();
         }
         public static void AddStorage<T>(this IServiceCollection serviceCollection) where T : Storage, IStorage
         {
-            serviceCollection.AddScoped<IStorage, T>();
+            serviceCollection.AddScoped<IStorage, T>(); 
         }
         public static void AddStorage(this IServiceCollection serviceCollection, StorageType storageType)
         {

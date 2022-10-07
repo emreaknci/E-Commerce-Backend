@@ -1,4 +1,5 @@
-﻿using ECommerceBackend.Application.Repositories;
+﻿using ECommerceBackend.Application.Abstractions.Services;
+using ECommerceBackend.Application.Repositories;
 using ECommerceBackend.Domain.Entities.Concrete;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -10,10 +11,12 @@ namespace ECommerceBackend.API.Controllers
     public class TestController : ControllerBase
     {
         private readonly IProductWriteRepository _productWriteRepository;
+        private readonly IMailService _mailService;
 
-        public TestController(IProductWriteRepository productWriteRepository)
+        public TestController(IProductWriteRepository productWriteRepository, IMailService mailService)
         {
             _productWriteRepository = productWriteRepository;
+            _mailService = mailService;
         }
 
         [HttpGet("[action]")]
@@ -33,6 +36,14 @@ namespace ECommerceBackend.API.Controllers
             }
             await _productWriteRepository.AddRangeAsync(dizi);
             await _productWriteRepository.SaveAsync();
+            return Ok();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> MailTest()
+        {
+            await _mailService.SendMessageAsync("emreakinci696@gmail.com", "Örnek Mail",
+                "<strong> Bu bir </strong> deneme mailidir.");
             return Ok();
         }
     }
