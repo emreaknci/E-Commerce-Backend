@@ -42,7 +42,7 @@ namespace ECommerceBackend.API.Controllers
         [HttpGet]
         public async Task<IActionResult> MailTest()
         {
-            await _mailService.SendMessageAsync("emreakinci696@gmail.com", "Örnek Mail",
+            await _mailService.SendMailAsync("emreakinci696@gmail.com", "Örnek Mail",
                 "<strong> Bu bir </strong> deneme mailidir.");
             return Ok();
         }

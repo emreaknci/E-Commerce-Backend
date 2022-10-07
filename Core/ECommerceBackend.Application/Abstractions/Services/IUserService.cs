@@ -13,5 +13,7 @@ namespace ECommerceBackend.Application.Abstractions.Services
         Task<CreateUserResponse> CreateAsync(CreateUserDto model);
         Task UpdateRefreshToken(string refreshToken,AppUser user,
             DateTime accessTokenDate,int refreshTokenLifeTimeInSeconds);
+
+        Task UpdatePasswordAsync(string userId, string resetToken, string newPassword);
     }
 }

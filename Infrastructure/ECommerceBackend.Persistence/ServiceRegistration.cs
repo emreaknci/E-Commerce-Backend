@@ -15,6 +15,7 @@ using ECommerceBackend.Domain.Entities.Identity;
 using ECommerceBackend.Persistence.Repositories.File.InvoiceFile;
 using ECommerceBackend.Persistence.Repositories.File.ProductImageFile;
 using ECommerceBackend.Persistence.Services;
+using Microsoft.AspNetCore.Identity;
 
 namespace ECommerceBackend.Persistence
 {
@@ -31,7 +32,8 @@ namespace ECommerceBackend.Persistence
                 options.Password.RequireLowercase = false;
                 options.Password.RequireUppercase = false;
 
-            }).AddEntityFrameworkStores<ECommerceBackendDbContext>();
+            }).AddEntityFrameworkStores<ECommerceBackendDbContext>()
+                .AddDefaultTokenProviders();
 
             services.AddScoped<ICustomerReadRepository, CustomerReadRepository>();
             services.AddScoped<ICustomerWriteRepository, CustomerWriteRepository>();
