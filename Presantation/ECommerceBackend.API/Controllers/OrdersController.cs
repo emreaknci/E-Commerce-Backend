@@ -1,4 +1,5 @@
-﻿using ECommerceBackend.Application.Features.Commands.Order.CreateOrder;
+﻿using ECommerceBackend.Application.Features.Commands.Order.CompleteOrder;
+using ECommerceBackend.Application.Features.Commands.Order.CreateOrder;
 using ECommerceBackend.Application.Features.Queries.Order.GetAllOrders;
 using ECommerceBackend.Application.Features.Queries.Order.GetOrderById;
 using Microsoft.AspNetCore.Authorization;
@@ -28,6 +29,13 @@ namespace ECommerceBackend.API.Controllers
 
         [HttpGet("{Id}")]
         public async Task<ActionResult> GetOrderById([FromRoute] GetOrderByIdQueryRequest request)
+        {
+            var response = await Mediator!.Send(request);
+            return Ok(response);
+        }
+
+        [HttpGet("complete-order/{Id}")]
+        public async Task<ActionResult> CompleteOrder([FromRoute] CompleteOrderCommandRequest request)
         {
             var response = await Mediator!.Send(request);
             return Ok(response);

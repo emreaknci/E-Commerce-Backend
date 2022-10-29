@@ -34,6 +34,13 @@ namespace ECommerceBackend.Persistence.Contexts
                 .HasOne(b => b.Order)
                 .WithOne(o => o.Basket)
                 .HasForeignKey<Order>(b => b.Id);
+
+            builder.Entity<Order>()
+                .HasOne(o => o.CompletedOrder)
+                .WithOne(c => c.Order)
+                .HasForeignKey<CompletedOrder>(c => c.OrderId);
+
+
             base.OnModelCreating(builder);
         }
 
@@ -51,13 +58,14 @@ namespace ECommerceBackend.Persistence.Contexts
             }
             return await base.SaveChangesAsync(cancellationToken);
         }
-        public DbSet<File> Files { get; set; }
-        public DbSet<ProductImageFile> ProductImageFiles { get; set; }
-        public DbSet<InvoiceFile> InvoiceFiles { get; set; }
+        public DbSet<File>? Files { get; set; }
+        public DbSet<ProductImageFile>? ProductImageFiles { get; set; }
+        public DbSet<InvoiceFile>? InvoiceFiles { get; set; }
         public DbSet<Product>? Products { get; set; }
         public DbSet<Order>? Orders { get; set; }
         public DbSet<Customer>? Customers { get; set; }
         public DbSet<Basket>? Baskets { get; set; }
         public DbSet<BasketItem>? BasketItems { get; set; }
+        public DbSet<CompletedOrder>? CompletedOrders { get; set; }
     }
 }
