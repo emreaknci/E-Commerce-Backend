@@ -1,4 +1,7 @@
 ﻿using System.Net;
+using ECommerceBackend.Application.Consts;
+using ECommerceBackend.Application.CustomAttributes;
+using ECommerceBackend.Application.Enums;
 using ECommerceBackend.Application.Features.Commands.Product.CreateProduct;
 using ECommerceBackend.Application.Features.Commands.Product.RemoveProduct;
 using ECommerceBackend.Application.Features.Commands.Product.UpdateProduct;
@@ -37,7 +40,8 @@ namespace ECommerceBackend.API.Controllers
         }
 
         [HttpPost]
-        //[Authorize(AuthenticationSchemes = "Admin")]
+        [Authorize(AuthenticationSchemes = "Admin")]
+        [AuthorizeDefinition(Menu = AuthorizeDefinitionConstants.Products, ActionType = ActionType.Writing, Definition = "Create Product")]
         public async Task<IActionResult> Post(CreateProductCommandRequest request)
         {
 
@@ -48,6 +52,7 @@ namespace ECommerceBackend.API.Controllers
 
         [HttpPut]
         [Authorize(AuthenticationSchemes = "Admin")]
+        [AuthorizeDefinition(Menu = AuthorizeDefinitionConstants.Products, ActionType = ActionType.Updating, Definition = "Update Product")]
         public async Task<IActionResult> Put([FromBody] UpdateProductCommandRequest updateProductCommandRequest)
         {
             var response = await Mediator!.Send(updateProductCommandRequest);
@@ -56,6 +61,7 @@ namespace ECommerceBackend.API.Controllers
 
         [HttpDelete("{Id}")]
         [Authorize(AuthenticationSchemes = "Admin")]
+        [AuthorizeDefinition(Menu = AuthorizeDefinitionConstants.Products, ActionType = ActionType.Deleting, Definition = "Delete Product")]
         public async Task<IActionResult> Delete([FromRoute] RemoveProductCommandRequest removeProductCommandRequest)
         {
             RemoveProductCommandResponse response = await Mediator!.Send(removeProductCommandRequest);
@@ -64,6 +70,7 @@ namespace ECommerceBackend.API.Controllers
 
         [HttpPost("[action]")]
         [Authorize(AuthenticationSchemes = "Admin")]
+        [AuthorizeDefinition(Menu = AuthorizeDefinitionConstants.Products, ActionType = ActionType.Writing, Definition = "Upload Product File")]
         public async Task<IActionResult> Upload([FromQuery] UploadProductImageCommandRequest request)
         {
             request.Files = Request.Form.Files;
@@ -72,6 +79,7 @@ namespace ECommerceBackend.API.Controllers
         }
 
         [HttpGet("[action]/{id}")]
+        [AuthorizeDefinition(Menu = AuthorizeDefinitionConstants.Products, ActionType = ActionType.Reading, Definition = "Get Products Images")]
         public async Task<IActionResult> GetImages([FromRoute] GetProductImagesQueryRequest getProductImagesQueryRequest)
         {
             var response = await Mediator!.Send(getProductImagesQueryRequest);
@@ -80,6 +88,7 @@ namespace ECommerceBackend.API.Controllers
 
         [HttpDelete("[action]/{id}")]
         [Authorize(AuthenticationSchemes = "Admin")]
+        [AuthorizeDefinition(Menu = AuthorizeDefinitionConstants.Products, ActionType = ActionType.Deleting, Definition = "Delete Product Image")]
         public async Task<IActionResult> DeleteImage([FromRoute] RemoveProductImageCommandRequest request, [FromQuery] string imageId)
         {
             request.ImageId = imageId;
@@ -88,6 +97,7 @@ namespace ECommerceBackend.API.Controllers
         }
         [HttpGet("[action]")]
         [Authorize(AuthenticationSchemes = "Admin")]
+        [AuthorizeDefinition(Menu = AuthorizeDefinitionConstants.Products, ActionType = ActionType.Updating, Definition = "Change Showcase Image")]
         public async Task<IActionResult> ChangeShowcaseImage([FromQuery] ChangeShowcaseImageCommandRequest changeShowcaseImageCommandRequest)
         {
             var response = await Mediator!.Send(changeShowcaseImageCommandRequest);
