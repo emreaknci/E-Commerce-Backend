@@ -16,6 +16,10 @@ using ECommerceBackend.Persistence.Repositories.File.InvoiceFile;
 using ECommerceBackend.Persistence.Repositories.File.ProductImageFile;
 using ECommerceBackend.Persistence.Services;
 using Microsoft.AspNetCore.Identity;
+using ECommerceBackend.Application.Repositories.Endpoint;
+using ECommerceBackend.Application.Repositories.Menu;
+using ECommerceBackend.Persistence.Repositories.Endpoint;
+using ECommerceBackend.Persistence.Repositories.Menu;
 
 namespace ECommerceBackend.Persistence
 {
@@ -62,6 +66,11 @@ namespace ECommerceBackend.Persistence
             services.AddScoped<IInvoiceFileReadRepository, InvoiceFileReadRepository>();
             services.AddScoped<IInvoiceFileWriteRepository, InvoiceFileWriteRepository>();
 
+            services.AddScoped<IEndpointReadRepository, EndpointReadRepository>();
+            services.AddScoped<IEndpointWriteRepository, EndpointWriteRepository>();
+
+            services.AddScoped<IMenuReadRepository, MenuReadRepository>();
+            services.AddScoped<IMenuWriteRepository, MenuWriteRepository>();
 
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAuthService, AuthService>();
@@ -72,7 +81,7 @@ namespace ECommerceBackend.Persistence
             services.AddScoped<IInternalAuthentication, AuthService>();
             services.AddScoped<IExternalAuthentication, AuthService>();
             services.AddScoped<IBasketService, BasketService>();
-
+            services.AddScoped<IAuthorizationEndpointService, AuthorizationEndpointService>();
         }
     }
 }

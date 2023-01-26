@@ -35,8 +35,11 @@ namespace ECommerceBackend.Persistence.Services
         public (object, int) GetAllRoles(int page, int size)
         {
             var query = _roleManager.Roles;
+            
+            if (page != -1 && size != -1)
+                query = query.Skip(page * size).Take(size);
 
-            return (query.Skip(page * size).Take(size).Select(r => new { r.Id, r.Name }), query.Count());
+            return (query.Select(r => new { r.Id, r.Name }), query.Count());
         }
 
         public async Task<(string id, string name)> GetRoleById(string id)
