@@ -1,10 +1,12 @@
 ﻿using System.Net;
+using ECommerceBackend.Application.Abstractions.Services;
 using ECommerceBackend.Application.Consts;
 using ECommerceBackend.Application.CustomAttributes;
 using ECommerceBackend.Application.Enums;
 using ECommerceBackend.Application.Features.Commands.Product.CreateProduct;
 using ECommerceBackend.Application.Features.Commands.Product.RemoveProduct;
 using ECommerceBackend.Application.Features.Commands.Product.UpdateProduct;
+using ECommerceBackend.Application.Features.Commands.Product.UpdateStockQrCodeToProduct;
 using ECommerceBackend.Application.Features.Commands.ProductImageFile.ChangeShowcaseImage;
 using ECommerceBackend.Application.Features.Commands.ProductImageFile.RemoveProductImage;
 using ECommerceBackend.Application.Features.Commands.ProductImageFile.UploadProductImage;
@@ -23,6 +25,20 @@ namespace ECommerceBackend.API.Controllers
 
     public class ProductsController : BaseController
     {
+        readonly IProductService _productService;
+
+        public ProductsController(IProductService productService)
+        {
+            _productService = productService;
+        }
+
+        [HttpGet("qrcode/{productId}")]
+        public async Task<IActionResult> GetQrCodeToProduct([FromRoute] string productId)
+        {
+            var data = await _productService.QrCodeToProductAsync(productId);
+            return File(data, "image/png");
+        }
+
 
         [HttpGet("{Id}")]
         public async Task<IActionResult> Get([FromRoute] GetByIdProductQueryRequest request)
@@ -30,7 +46,12 @@ namespace ECommerceBackend.API.Controllers
             var response = await Mediator!.Send(request);
             return Ok(response);
         }
-
+        [HttpPut("qrcode")]
+        public async Task<IActionResult> UpdateStockQrCodeToProduct(UpdateStockQrCodeToProductCommandRequest updateStockQrCodeToProductCommandRequest)
+        {
+            UpdateStockQrCodeToProductCommandResponse response = await Mediator!.Send(updateStockQrCodeToProductCommandRequest);
+            return Ok(response);
+        }
         [HttpGet]
         public async Task<IActionResult> Get([FromQuery] GetAllProductQueryRequest request)
         {

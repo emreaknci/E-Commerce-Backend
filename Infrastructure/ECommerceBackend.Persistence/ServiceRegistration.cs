@@ -77,6 +77,7 @@ namespace ECommerceBackend.Persistence
             services.AddScoped<IRoleService, RoleService>();
 
             services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<IProductService, ProductService>();
 
             services.AddScoped<IInternalAuthentication, AuthService>();
             services.AddScoped<IExternalAuthentication, AuthService>();
