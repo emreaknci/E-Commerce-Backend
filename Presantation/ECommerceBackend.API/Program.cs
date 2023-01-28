@@ -2,6 +2,7 @@ using System.Security.Claims;
 using System.Text;
 using ECommerceBackend.API.Configurations.ColumnWriters;
 using ECommerceBackend.API.Extensions;
+using ECommerceBackend.API.Filters;
 using ECommerceBackend.Application;
 using ECommerceBackend.Application.Validators.Products;
 using ECommerceBackend.Infrastructure.Filter;
@@ -36,7 +37,11 @@ builder.Services.AddCors(options => options.AddDefaultPolicy(policy
     => policy.WithOrigins("http://localhost:4200", "https://localhost:4200").AllowAnyHeader().AllowAnyMethod().AllowCredentials()
     ));
 
-builder.Services.AddControllers(options => options.Filters.Add<ValidationFilter>())
+builder.Services.AddControllers(options =>
+    {
+        options.Filters.Add<ValidationFilter>();
+        options.Filters.Add<RolePermissionFilter>();
+    })
     .AddFluentValidation(configuration => configuration.RegisterValidatorsFromAssemblyContaining<CreateProductValidator>())
     .ConfigureApiBehaviorOptions(options => options.SuppressModelStateInvalidFilter = true);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
