@@ -15,5 +15,9 @@ namespace ECommerceBackend.Application.Abstractions.Services
             DateTime accessTokenDate,int refreshTokenLifeTimeInSeconds);
 
         Task UpdatePasswordAsync(string userId, string resetToken, string newPassword);
+        Task<List<UserDtoForList>> GetAllUsersAsync(int page, int size);
+        int TotalUsersCount { get; }
+        Task AssignRoleToUserAsync(string userId, string[] roles);
+        Task<string[]> GetRolesToUserAsync(string userId);
     }
 }
